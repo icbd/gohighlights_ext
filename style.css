@@ -1,0 +1,63 @@
+/**
+>>> color
+ */
+
+[data-ghl-color=green] {
+    background-color: #C2E3CA !important;
+}
+
+[data-ghl-color=purple] {
+    background-color: #A090E7 !important;
+}
+
+[data-ghl-color=blue] {
+    background-color: #6698F7 !important;
+}
+
+/***
+<<< color
+ */
+
+/**
+>>> marker-popup
+ */
+#ghl_marker_popup {
+    /*position: absolute;*/
+    display: none;
+    /*display: inline-block;*/
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: #ddd 0 0 4px 2px;
+    padding: 4px;
+    margin: 6px;
+    background-color: white;
+    z-index: 999;
+    overflow: hidden;
+    font-size: 0;
+    line-height: 0;
+}
+
+#ghl_marker_popup .ghl-btn-options {
+    display: inline-block;
+}
+
+#ghl_marker_popup .ghl-btn-options > .ghl-btn {
+    display: inline-block;
+    border-radius: 50%;
+    height: 26px;
+    width: 26px;
+    margin: 2px 3px;
+}
+
+#ghl_marker_popup .ghl-btn-options > .ghl-btn:hover, .ghl-btn.hover {
+    cursor: pointer;
+    box-shadow: 0 0 2px #fff, 0 0 4px 3px #ccc;
+}
+
+[data-ghl-hash-key] {
+    cursor: pointer;
+}
+
+/**
+<<< marker-popup
+ */

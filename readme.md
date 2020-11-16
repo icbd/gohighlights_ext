@@ -1,0 +1,1 @@
+# Gohighlights Chrome Extension

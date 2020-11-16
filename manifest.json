@@ -1,0 +1,60 @@
+{
+  "manifest_version": 2,
+  "name": "Go Highlights",
+  "version": "0.0.1",
+  "description": "__MSG_full_description__",
+  "short_name": "GoHighlights",
+  "default_locale": "en",
+  "author": "@CbdFocus",
+  "page_action": {
+  },
+  "background": {
+    "scripts": [
+      "src/api.js",
+      "src/user.js",
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "css": [
+        "style.css"
+      ],
+      "js": [
+        "src/user.js",
+        "src/uuid.js",
+        "src/dom.js",
+        "src/api.js",
+        "src/selection_range.js",
+        "src/selection_item.js",
+        "content.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": [
+    "tabs",
+    "storage",
+    "declarativeContent",
+    "activeTab"
+  ],
+  "icons": {
+    "16": "img/icon/icon16.png",
+    "32": "img/icon/icon32.png",
+    "48": "img/icon/icon48.png",
+    "64": "img/icon/icon64.png",
+    "128": "img/icon/icon128.png",
+    "256": "img/icon/icon256.png",
+    "512": "img/icon/icon512.png"
+  },
+  "web_accessible_resources": [
+    "content.js",
+    "marker.html"
+  ]
+}
