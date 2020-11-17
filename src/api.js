@@ -67,11 +67,15 @@ class Api {
                 method: httpMethod,
                 mode: "cors",
             }).then(function (response) {
+                if (response.status === 401) {
+                    throw new Error(response)
+                }
                 const data = response.json()
                 console.debug(data)
                 resolve(data)
-            }).catch(function (err) {
-                console.warn("api conn failed", err)
+            }).catch(function (response) {
+                console.warn("api conn failed: ", response.status)
+                chrome.storage.sync.set({"token": null});
                 reject(err)
             })
         })
