@@ -31,7 +31,7 @@ function addBtnClick(btnDoms) {
 
             // change color
             if (hashKey) {
-                SelectionCollection.getInstance().data[hashKey].update(btnColor);
+                SelectionCollection.UpdateAndSync(hashKey, btnColor);
                 turnOffPopup();
                 return
             }

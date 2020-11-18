@@ -8,7 +8,7 @@ class SelectionItem {
             texts: [],
             startOffset: range.startOffset, // don't know why, offset of `this.range` will change. Maybe splitText
             endOffset: range.endOffset,
-            color: color,
+            color: this.color,
             hashKey: this.hashKey,
         }
 
@@ -33,10 +33,12 @@ class SelectionItem {
 
     update(color) {
         this.color = color;
+        this._serialization.color = color;
         const nodes = this.selectedNodes();
         for (let i = 0; i < nodes.length; i++) {
             nodes[i].dataset.ghlColor = this.color;
         }
+        return this
     }
 
     highlight() {
@@ -124,8 +126,8 @@ class SelectionCollection {
         User.Current(function (user) {
             const api = new Api(user.token)
             api.commit(baseURL(),
-                selectionItem.color,
                 selectionItem.hashKey,
+                selectionItem.color,
                 JSON.stringify(selectionItem.serialization())).then(function (resp) {
                 console.debug(resp);
             })
@@ -148,6 +150,27 @@ class SelectionCollection {
         User.Current(function (user) {
             const api = new Api(user.token);
             api.cancel(hashKey).then(function (resp) {
+                console.debug(resp);
+            })
+        });
+    }
+
+    static Update(hashKey, tag) {
+        const selectionItem = this.getInstance().data[hashKey];
+        selectionItem.update(tag);
+        return selectionItem;
+    }
+
+    static UpdateAndSync(hashKey, tag) {
+        const selectionItem = this.Update(hashKey, tag);
+
+        User.Current(function (user) {
+            const api = new Api(user.token)
+            api.update(
+                selectionItem.hashKey,
+                selectionItem.color,
+                JSON.stringify(selectionItem.serialization()),
+            ).then(function (resp) {
                 console.debug(resp);
             })
         });

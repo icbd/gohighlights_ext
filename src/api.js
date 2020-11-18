@@ -20,7 +20,7 @@ class Api {
         return this._conn("POST", "/api/v1/sessions", data);
     }
 
-    commit(url, tag, hashKey, selection) {
+    commit(url, hashKey, tag, selection) {
         const data = {
             "url": url,
             "tag": tag,
@@ -28,6 +28,14 @@ class Api {
             "selection": selection,
         }
         return this._conn("POST", "/api/v1/marks", data)
+    }
+
+    update(hashKey, tag, selection) {
+        const data = {
+            "tag": tag,
+            "selection": selection,
+        }
+        return this._conn("PATCH", "/api/v1/marks/" + hashKey, data)
     }
 
     cancel(hashKey) {
