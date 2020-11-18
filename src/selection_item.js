@@ -114,25 +114,42 @@ class SelectionCollection {
         instance.list.push(selectionItem);
         let hashKey = selectionItem.hashKey;
         instance.data[hashKey] = selectionItem;
-
         selectionItem.highlight();
+        return hashKey;
+    }
+
+    static PushAndSync(selectionItem) {
+        const hashKey = this.Push(selectionItem);
 
         User.Current(function (user) {
             const api = new Api(user.token)
-            api.commit(window.location.href,
+            api.commit(baseURL(),
                 selectionItem.color,
                 selectionItem.hashKey,
-                JSON.stringify(selectionItem.serialization())).then(function (e) {
+                JSON.stringify(selectionItem.serialization())).then(function (resp) {
+                console.debug(resp);
             })
         });
 
         return hashKey;
     }
 
+
     static Remove(hashKey) {
         let instance = this.getInstance();
         instance.list = instance.list.filter(k => k !== hashKey);
         instance.data[hashKey].extinguish();
         delete instance.data[hashKey];
+    }
+
+    static RemoveAndSync(hashKey) {
+        this.Remove(hashKey);
+
+        User.Current(function (user) {
+            const api = new Api(user.token);
+            api.cancel(hashKey).then(function (resp) {
+                console.debug(resp);
+            })
+        });
     }
 }
