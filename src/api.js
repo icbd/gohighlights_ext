@@ -20,7 +20,7 @@ class Api {
         return this._conn("POST", "/api/v1/sessions", data);
     }
 
-    commit(url, tag, hashKey, selection) {
+    commit(url, hashKey, tag, selection) {
         const data = {
             "url": url,
             "tag": tag,
@@ -30,8 +30,20 @@ class Api {
         return this._conn("POST", "/api/v1/marks", data)
     }
 
+    update(hashKey, tag, selection) {
+        const data = {
+            "tag": tag,
+            "selection": selection,
+        }
+        return this._conn("PATCH", "/api/v1/marks/" + hashKey, data)
+    }
+
+    cancel(hashKey) {
+        return this._conn("DELETE", "/api/v1/marks/" + hashKey)
+    }
+
     query(url) {
-        const queryParams = "?url=" + btoa(url)
+        const queryParams = "?url=" + encodeURIComponent(btoa(url));
         return this._conn("GET", "/api/v1/marks/query" + queryParams)
     }
 
@@ -54,6 +66,8 @@ class Api {
         } else {
             if (data) {
                 data = {...data, ...{"bearer": this.token}}
+            } else {
+                data = {"bearer": this.token}
             }
         }
 
@@ -66,17 +80,27 @@ class Api {
                 },
                 method: httpMethod,
                 mode: "cors",
-            }).then(function (response) {
+            }).then(response => {
                 if (response.status === 401) {
-                    throw new Error(response)
+                    throw new Error(response);
                 }
-                const data = response.json()
-                console.debug(data)
-                resolve(data)
+                return response.text();
+            }).then(function (response) {
+                let data;
+                try {
+                    data = JSON.parse(response)
+                } catch (e) {
+                    data = {};
+                } finally {
+                    console.debug(data);
+                    resolve(data);
+                }
             }).catch(function (response) {
-                console.warn("api conn failed: ", response.status)
-                chrome.storage.sync.set({"token": null});
-                reject(err)
+                console.debug("api conn failed: ", response.status);
+                if (response.status === 401) {
+                    chrome.storage.sync.set({"token": null});
+                }
+                reject(err);
             })
         })
     }

@@ -23,7 +23,7 @@ function addBtnClick(btnDoms) {
 
             // remove color
             if (clickEvent.target.classList.contains("hover")) {
-                SelectionCollection.Remove(hashKey);
+                SelectionCollection.RemoveAndSync(hashKey);
                 delete $popup.dataset.ghlHashKey;
                 turnOffPopup();
                 return
@@ -31,14 +31,14 @@ function addBtnClick(btnDoms) {
 
             // change color
             if (hashKey) {
-                SelectionCollection.getInstance().data[hashKey].update(btnColor);
+                SelectionCollection.UpdateAndSync(hashKey, btnColor);
                 turnOffPopup();
                 return
             }
 
             // add new color
             const item = new SelectionItem($selectionRange, btnColor, null);
-            SelectionCollection.Push(item);
+            SelectionCollection.PushAndSync(item);
             turnOffPopup();
         }
     }
@@ -109,11 +109,11 @@ function initHighLights() {
         }
 
         const api = new Api(user.token)
-        api.query(window.location.href).then(function (items) {
+        api.query(baseURL()).then(function (items) {
             items.forEach(function (item) {
-                const selection = SelectionItem.Parse(JSON.parse(item.selection))
-                if (selection) {
-                    selection.highlight();
+                const selectionItem = SelectionItem.Parse(JSON.parse(item.selection));
+                if (selectionItem) {
+                    SelectionCollection.Push(selectionItem);
                 }
             });
         });
