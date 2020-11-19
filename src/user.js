@@ -20,8 +20,12 @@ class User {
     }
 
     static Login(username, password) {
+        const params = {
+            email: username,
+            password: password,
+        }
         const api = new Api();
-        api.login(username, password).then(function (resp) {
+        api.usersLogin(params).then(function (resp) {
             if (resp && resp["token"]) {
                 chrome.storage.sync.set({"token": resp["token"]});
                 chrome.storage.sync.set({"token_expired_at": resp["expired_at"]});

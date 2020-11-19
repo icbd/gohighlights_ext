@@ -107,16 +107,22 @@ function initHighLights() {
             console.error("user not login");
             return
         }
-
-        const api = new Api(user.token)
-        api.query(baseURL()).then(function (items) {
-            items.forEach(function (item) {
-                const selectionItem = SelectionItem.Parse(JSON.parse(item.selection));
-                if (selectionItem) {
-                    SelectionCollection.Push(selectionItem);
-                }
-            });
-        });
+        const msg = {
+            msgType: "API_MSG",
+            method: "marksQuery",
+            params: {
+                url: baseURL(),
+            }
+        }
+        chrome.runtime.sendMessage(msg, function (response) {
+                response.forEach(function (item) {
+                    const selectionItem = SelectionItem.Parse(JSON.parse(item.selection));
+                    if (selectionItem) {
+                        SelectionCollection.Push(selectionItem);
+                    }
+                });
+            }
+        );
     });
 }
 

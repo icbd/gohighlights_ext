@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Go Highlights",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "__MSG_full_description__",
   "short_name": "GoHighlights",
   "default_locale": "en",
@@ -10,7 +10,8 @@
   },
   "background": {
     "scripts": [
-      "src/api.js",
+      "src/background/api.js",
+      "src/background/message.js",
       "src/user.js",
       "background.js"
     ],
@@ -27,9 +28,9 @@
         "src/user.js",
         "src/uuid.js",
         "src/dom.js",
-        "src/api.js",
         "src/selection_range.js",
         "src/selection_item.js",
+        "src/selection_collection.js",
         "content.js"
       ],
       "matches": [
@@ -57,5 +58,6 @@
   "web_accessible_resources": [
     "content.js",
     "marker.html"
-  ]
+  ],
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0OOwISuHkHjOkD9gGtutcT8o1Dp1qQTCbNTVY4SE2UTHgsKJ08shPBclIVScwzTPCOCi/8GLilm9QKNv9Zy3+BNosOg7Rre+vKzHNkIN7Sjr9rDKeJmAp1PMRyY7io+Ls9CgM0cS60ZMtRTjUr/p128WfZvdFSDUzItYGJ74i7duoOipg+i6Ivo3QGM2q4M5tcbdyGiz+u4cvkqUNmNSSw5THm+c2UnOccAC3L+UqT6JtESP5izxMF1nTww379aKeB3KoIsR5p7cOF9l1i3NlcoC8ELQz3GVPcMFt2+waRQ4ozqCAWahoABoixsM9QSrQjTTUilP9bM0nMC00RblDwIDAQAB"
 }
