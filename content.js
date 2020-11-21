@@ -102,11 +102,7 @@ function turnOffPopup() {
 }
 
 function initHighLights() {
-    User.Current(function (user) {
-        if (!user) {
-            console.error("user not login");
-            return
-        }
+    User.Current().then(user => {
         const msg = {
             msgType: "API_MSG",
             method: "marksQuery",
@@ -114,8 +110,9 @@ function initHighLights() {
                 url: baseURL(),
             }
         }
-        chrome.runtime.sendMessage(msg, function (response) {
-                response.forEach(function (item) {
+        chrome.runtime.sendMessage(msg, response => {
+                const items = response.body;
+                items.forEach(function (item) {
                     const selectionItem = SelectionItem.Parse(JSON.parse(item.selection));
                     if (selectionItem) {
                         SelectionCollection.Push(selectionItem);
@@ -123,7 +120,9 @@ function initHighLights() {
                 });
             }
         );
-    });
+    }).catch(err => {
+        console.error(err);
+    })
 }
 
 setTimeout(initHighLights, 500);

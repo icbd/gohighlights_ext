@@ -9,12 +9,50 @@ Request for API Proxy:
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         // api proxy
         if (request.msgType === "API_MSG") {
-            User.Current(function (user) {
-                const api = new Api(user.token)
-                return api[request.method](request.params).then(response => {
-                    sendResponse(response);
+            const responseData = {}
+
+            if (["loginOrRegister", "usersRegister", "usersLogin"].includes(request.method)) {
+                const api = new Api();
+                api[request.method](request.params).then(response => {
+                    console.debug(response);
+                    responseData.httpCode = response.status;
+                    responseData.headers = response.headers;
+                    return response.text();
                 })
-            });
+                    .then(response => {
+                        try {
+                            responseData.body = JSON.parse(response);
+                        } catch (e) {
+                            responseData.body = {};
+                        }
+                        sendResponse(responseData);
+
+                    })
+                    .catch(err => console.warn(err));
+                return  true
+            }
+
+            User.Current()
+                .then(user => {
+                    const api = new Api(user.token);
+                    return api[request.method](request.params);
+                })
+                .then(response => {
+                    console.debug(response);
+                    responseData.httpCode = response.status;
+                    responseData.headers = response.headers;
+                    return response.text();
+                })
+                .then(response => {
+                    try {
+                        responseData.body = JSON.parse(response);
+                    } catch (e) {
+                        responseData.body = {};
+                    }
+                    sendResponse(responseData);
+
+                })
+                .catch(err => console.warn(err));
         }
         return true;
     }
