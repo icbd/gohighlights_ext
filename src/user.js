@@ -34,7 +34,7 @@ class User {
             password: password,
         }
         const api = new Api();
-        api.usersLogin(params)
+        return api.usersLogin(params)
             .then(resp => {
                 if (resp.ok) {
                     return resp.json();
@@ -45,6 +45,9 @@ class User {
             .then(resp => {
                 chrome.storage.sync.set({"token": resp.token});
                 chrome.storage.sync.set({"token_expired_at": resp.expired_at});
+                chrome.storage.sync.set({"user__username": username});
+
+                return new User(resp.token);
             })
             .catch(resp => {
                 console.error(resp);

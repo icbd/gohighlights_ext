@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
                     })
                     .catch(err => console.warn(err));
-                return  true
+                return true;
             }
 
             User.Current()
@@ -53,7 +53,28 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
                 })
                 .catch(err => console.warn(err));
+            return true;
         }
+
+        // Call local method
+        if (request.msgType === "METHOD_CALL_MSG") {
+            const responseData = {ok: false}
+            switch (request.method) {
+                case "User.login":
+                    User.Login(...request.params).then(user => {
+                        responseData.ok = !!user;
+                        responseData.username = request.params[0];
+                    })
+                    break;
+                default:
+                    responseData.err = "not support";
+                    break;
+            }
+
+            sendResponse(responseData)
+            return true;
+        }
+
         return true;
     }
 );
