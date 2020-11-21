@@ -3,19 +3,28 @@ class User {
         this.token = token;
     }
 
-    static Current(callback) {
-        chrome.storage.sync.get(["token"], function (result) {
-            const token = result.token;
-            if (!token) {
-                return callback(null)
-            }
-            chrome.storage.sync.get(["token_expired_at"], function (result) {
-                if (Date.now() < Date.parse(result.token_expired_at)) {
-                    return callback(new User(token));
-                } else {
-                    return callback(null)
+    /**
+     *
+     * @returns {Promise<unknown>}
+     * @constructor
+     */
+    static Current() {
+        return new Promise((resolve, reject) => {
+            chrome.storage.sync.get(["token"], result => {
+                const token = result.token;
+                if (!token) {
+                    reject(new Error("current user not found"));
+                    return
                 }
-            })
+                chrome.storage.sync.get(["token_expired_at"], result => {
+                    const expiredAt = result.token_expired_at;
+                    if (expiredAt && Date.now() < Date.parse(expiredAt)) {
+                        resolve(new User(token));
+                    } else {
+                        reject(new Error("token expired"));
+                    }
+                })
+            });
         });
     }
 
@@ -25,11 +34,23 @@ class User {
             password: password,
         }
         const api = new Api();
-        api.usersLogin(params).then(function (resp) {
-            if (resp && resp["token"]) {
-                chrome.storage.sync.set({"token": resp["token"]});
-                chrome.storage.sync.set({"token_expired_at": resp["expired_at"]});
-            }
-        })
+        return api.usersLogin(params)
+            .then(resp => {
+                if (resp.ok) {
+                    return resp.json();
+                } else {
+                    throw resp;
+                }
+            })
+            .then(resp => {
+                chrome.storage.sync.set({"token": resp.token});
+                chrome.storage.sync.set({"token_expired_at": resp.expired_at});
+                chrome.storage.sync.set({"user__username": username});
+
+                return new User(resp.token);
+            })
+            .catch(resp => {
+                console.error(resp);
+            });
     }
 }

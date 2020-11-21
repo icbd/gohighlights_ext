@@ -10,9 +10,9 @@ chrome.runtime.onInstalled.addListener(function () {
             }
         ]);
     });
-    User.Current(function (user) {
-        if (!user) {
-            User.Login("wwwicbd@gmail.com", "12345678"); // TODO: login page
-        }
-    })
+
+    User.Current().catch(err => {
+        console.debug(err);
+        // User.Login("wwwicbd@gmail.com", "12345678");
+    });
 });

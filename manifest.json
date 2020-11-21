@@ -7,12 +7,13 @@
   "default_locale": "en",
   "author": "@CbdFocus",
   "page_action": {
+    "default_popup": "login.html"
   },
   "background": {
     "scripts": [
+      "src/user.js",
       "src/background/api.js",
       "src/background/message.js",
-      "src/user.js",
       "background.js"
     ],
     "persistent": false

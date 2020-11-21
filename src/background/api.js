@@ -10,6 +10,16 @@ class Api {
           password: ""
       }
      */
+    loginOrRegister(params) {
+        return this._conn("POST", "/api/v1/users", params)
+    }
+
+    /*
+      {
+          email: "",
+          password: ""
+      }
+     */
     usersRegister(params) {
         return this._conn("POST", "/api/v1/users", params)
     }
@@ -108,26 +118,16 @@ class Api {
                 method: httpMethod,
                 mode: "cors",
             }).then(response => {
-                if (response.status === 401) {
-                    throw new Error(response);
+                if (!response.ok) {
+                    throw response;
                 }
-                return response.text();
-            }).then(response => {
-                let respObj;
-                try {
-                    respObj = JSON.parse(response);
-                } catch (e) {
-                    respObj = {};
-                } finally {
-                    console.debug(respObj);
-                    resolve(respObj);
-                }
+                resolve(response);
             }).catch(response => {
                 if (response.status === 401) {
                     chrome.storage.sync.set({"token": null});
                 }
-                reject(err);
-            })
+                reject(response);
+            });
         })
     }
 }
