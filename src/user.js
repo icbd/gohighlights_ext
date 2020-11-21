@@ -34,11 +34,20 @@ class User {
             password: password,
         }
         const api = new Api();
-        api.usersLogin(params).then(function (resp) {
-            if (resp && resp["token"]) {
-                chrome.storage.sync.set({"token": resp["token"]});
-                chrome.storage.sync.set({"token_expired_at": resp["expired_at"]});
-            }
-        })
+        api.usersLogin(params)
+            .then(resp => {
+                if (resp.ok) {
+                    return resp.json();
+                } else {
+                    throw resp;
+                }
+            })
+            .then(resp => {
+                chrome.storage.sync.set({"token": resp.token});
+                chrome.storage.sync.set({"token_expired_at": resp.expired_at});
+            })
+            .catch(resp => {
+                console.error(resp);
+            });
     }
 }
