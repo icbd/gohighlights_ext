@@ -1,5 +1,8 @@
 {
   "full_description": {
     "message": "Go Highlight Ideas."
+  },
+  "not_logged_in": {
+    "message": "Not Logged In."
   }
 }

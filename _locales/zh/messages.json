@@ -1,5 +1,8 @@
 {
   "full_description": {
     "message": "高亮你的IDEA."
+  },
+  "not_logged_in": {
+    "message": "您还未登录."
   }
 }
