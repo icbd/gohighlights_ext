@@ -7,7 +7,7 @@
   "default_locale": "en",
   "author": "@CbdFocus",
   "page_action": {
-    "default_popup": "login.html"
+    "default_title": "__MSG_not_logged_in__"
   },
   "background": {
     "scripts": [

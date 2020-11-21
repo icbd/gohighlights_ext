@@ -118,15 +118,7 @@ class Api {
                 method: httpMethod,
                 mode: "cors",
             }).then(response => {
-                if (!response.ok) {
-                    throw response;
-                }
                 resolve(response);
-            }).catch(response => {
-                if (response.status === 401) {
-                    chrome.storage.sync.set({"token": null});
-                }
-                reject(response);
             });
         })
     }
