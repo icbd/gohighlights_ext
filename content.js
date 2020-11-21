@@ -121,7 +121,8 @@ function initHighLights() {
             }
         );
     }).catch(err => {
-        console.error(err);
+        chrome.storage.sync.clear();
+        console.info("chrome.storage.sync.clear");
     })
 }
 

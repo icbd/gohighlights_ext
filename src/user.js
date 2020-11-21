@@ -27,30 +27,4 @@ class User {
             });
         });
     }
-
-    static Login(username, password) {
-        const params = {
-            email: username,
-            password: password,
-        }
-        const api = new Api();
-        return api.usersLogin(params)
-            .then(resp => {
-                if (resp.ok) {
-                    return resp.json();
-                } else {
-                    throw resp;
-                }
-            })
-            .then(resp => {
-                chrome.storage.sync.set({"token": resp.token});
-                chrome.storage.sync.set({"token_expired_at": resp.expired_at});
-                chrome.storage.sync.set({"user__username": username});
-
-                return new User(resp.token);
-            })
-            .catch(resp => {
-                console.error(resp);
-            });
-    }
 }
