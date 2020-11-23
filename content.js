@@ -113,7 +113,7 @@ function initHighLights() {
         chrome.runtime.sendMessage(msg, response => {
                 const items = response.body;
                 items.forEach(function (item) {
-                    const selectionItem = SelectionItem.Parse(JSON.parse(item.selection));
+                    const selectionItem = SelectionItem.Parse(item);
                     if (selectionItem) {
                         SelectionCollection.Push(selectionItem);
                     }

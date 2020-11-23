@@ -66,34 +66,35 @@ class SelectionItem {
     }
 
     serialization() {
-        return JSON.stringify(this._serialization);
+        return this._serialization;
     }
 
     // rebuild range
-    static Parse(record) {
+    static Parse(item) {
+        const selection = item.selection;
         try {
             const range = document.createRange();
 
             let matchIndex = 0;
             const nodes = filterTextNodes(dfsNodes(document.body));
             nodes.forEach(function (node) {
-                if (record.texts[matchIndex] !== node.textContent) {
+                if (selection.texts[matchIndex] !== node.textContent) {
                     return
                 }
 
                 if (matchIndex === 0) {
-                    range.setStart(node, record.startOffset);
+                    range.setStart(node, selection.startOffset);
                 }
 
-                if (matchIndex === (record.texts.length - 1)) {
-                    range.setEnd(node, record.endOffset);
+                if (matchIndex === (selection.texts.length - 1)) {
+                    range.setEnd(node, selection.endOffset);
                     return false;// break forEach
                 }
                 matchIndex += 1
             })
 
             if (range.startContainer && range.endContainer) {
-                return new SelectionItem(range, record.color, record.hashKey);
+                return new SelectionItem(range, item.tag, item.hash_key);
             } else {
                 return null
             }
