@@ -1,4 +1,5 @@
 let $popup;
+let $comment;
 fetch(chrome.extension.getURL("./marker.html"))
     .then(response => response.text())
     .then(function (markerStr) {
@@ -6,7 +7,10 @@ fetch(chrome.extension.getURL("./marker.html"))
         document.body.appendChild(markerNode.body.firstChild);
 
         $popup = document.getElementById("ghl_marker_popup");
+        $comment = $popup.querySelector(".ghl-comment");
         addBtnClick($popup.querySelectorAll(".ghl-btn"));
+
+        document.getElementById("saveCommentBtn").addEventListener("click", saveComment);
     }).catch(err => {
     console.error("fetch marker.html failed.");
 });
@@ -77,6 +81,9 @@ window.addEventListener("click", function (clickEvent) {
     if (!item) {
         return
     }
+
+    // replay highilight button and comment
+    turnOnComment(item.comment);
     turnOnPopup(clickEvent);
     const selectedBtn = $popup.querySelector(`[data-ghl-color=${color}]`);
     selectedBtn.classList.add("hover");
@@ -98,7 +105,21 @@ function turnOffPopup() {
             btns[i].classList.remove("hover");
         }
         delete $popup.dataset.ghlHashKey
+
+        turnOffComment();
     }
+}
+
+function turnOnComment(content) {
+    $comment.style.display = "block";
+    if (content) {
+        $comment.querySelector("textarea").value = content;
+    }
+}
+
+function turnOffComment() {
+    $comment.style.display = "none";
+    $comment.querySelector("textarea").value = "";
 }
 
 function initHighLights() {
@@ -127,3 +148,11 @@ function initHighLights() {
 }
 
 setTimeout(initHighLights, 500);
+
+function saveComment() {
+    const hashKey = $popup.dataset.ghlHashKey;
+    const content = this.parentElement.querySelector("textarea").value;
+    console.debug("saveComment", hashKey, content);
+    SelectionCollection.PutComment(hashKey, content);
+    turnOffPopup();
+}

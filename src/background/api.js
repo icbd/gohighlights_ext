@@ -56,7 +56,7 @@ class Api {
      */
     marksUpdate(params) {
         const hashKey = params.hash_key;
-        delete params.hashKey;
+        delete params.hash_key;
         return this._conn("PATCH", "/api/v1/marks/" + hashKey, params)
     }
 
@@ -95,6 +95,18 @@ class Api {
             queryParams.append("size", params.size);
         }
         return this._conn("GET", "/api/v1/marks?" + queryParams, data)
+    }
+
+    /*
+      {
+          hash_key: "",
+          content: ""
+      }
+     */
+    commentsPut(params) {
+        const hashKey = params.hash_key;
+        delete params.hash_key;
+        return this._conn("PUT", "/api/v1/marks/" + hashKey + "/comment", params)
     }
 
     _conn(httpMethod, path, params) {

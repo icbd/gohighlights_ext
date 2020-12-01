@@ -69,7 +69,7 @@ class SelectionCollection {
 
     static Update(hashKey, tag) {
         const selectionItem = this.getInstance().data[hashKey];
-        selectionItem.update(tag);
+        selectionItem.updateTag(tag);
         return selectionItem;
     }
 
@@ -83,6 +83,25 @@ class SelectionCollection {
                 hash_key: selectionItem.hashKey,
                 tag: tag,
                 selection: selectionItem.serialization(),
+            }
+        }
+        chrome.runtime.sendMessage(msg, response => {
+            console.debug(response);
+        });
+
+        return selectionItem;
+    }
+
+    static PutComment(hashKey, content) {
+        const selectionItem = this.getInstance().data[hashKey];
+        selectionItem.updateComment(content);
+
+        const msg = {
+            msgType: "API_MSG",
+            method: "commentsPut",
+            params: {
+                hash_key: hashKey,
+                content: content,
             }
         }
         chrome.runtime.sendMessage(msg, response => {

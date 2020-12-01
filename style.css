@@ -54,8 +54,24 @@
     box-shadow: 0 0 2px #fff, 0 0 4px 3px #ccc;
 }
 
-[data-ghl-hash-key] {
+[data-ghl-hash-key] .ghl-btn {
     cursor: pointer;
+}
+
+#ghl_marker_popup .ghl-comment {
+    display: none;
+    font-size: 13px;
+    line-height: 13px;
+}
+
+#ghl_marker_popup .ghl-comment textarea {
+    margin: 3px 0;
+    display: block;
+}
+
+#ghl_marker_popup .ghl-comment button {
+    cursor: pointer;
+    border: none;
 }
 
 /**
