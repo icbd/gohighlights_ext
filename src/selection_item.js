@@ -1,8 +1,9 @@
 class SelectionItem {
-    constructor(range, color, hashKey) {
+    constructor(range, color, hashKey, commentContent) {
         this.hashKey = hashKey || UUID.generate();
         this.range = range;
         this.color = color;
+        this.comment = commentContent;
         this._selectedNodes = [];
         this._serialization = {
             texts: [],
@@ -31,13 +32,18 @@ class SelectionItem {
         return this._selectedNodes;
     }
 
-    update(color) {
+    updateTag(color) {
         this.color = color;
         this._serialization.color = color;
         const nodes = this.selectedNodes();
         for (let i = 0; i < nodes.length; i++) {
             nodes[i].dataset.ghlColor = this.color;
         }
+        return this
+    }
+
+    updateComment(content) {
+        this.comment = content;
         return this
     }
 
@@ -94,7 +100,11 @@ class SelectionItem {
             })
 
             if (range.startContainer && range.endContainer) {
-                return new SelectionItem(range, item.tag, item.hash_key);
+                let content = undefined;
+                if (item.comment) {
+                    content = item.comment.content;
+                }
+                return new SelectionItem(range, item.tag, item.hash_key, content);
             } else {
                 return null
             }
