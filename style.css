@@ -14,9 +14,64 @@
     background-color: #6698F7 !important;
 }
 
+[data-ghl-color=yellow] {
+    background-color: #FEFA8B !important;
+}
+
 /***
 <<< color
  */
+
+
+/***
+>>> span hover prompting text
+ */
+[data-ghl-comment] {
+    position: relative;
+    border-bottom: 1px blue dashed;
+}
+
+/*default don't display*/
+[data-ghl-comment]:before, [data-ghl-comment]:after {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    transition: all 0.12s ease-out 0.12s;
+    opacity: 0;
+    color: #333;
+}
+
+/*display when hover*/
+[data-ghl-comment]:hover:before,
+[data-ghl-comment]:hover:after {
+    opacity: 1;
+}
+
+/*hover popup text*/
+[data-ghl-comment]:after {
+    content: attr(data-ghl-comment);
+    background-color: #ddd;
+    border-radius: 5px;
+    margin-bottom: 12px;
+    padding: 5px 10px;
+    min-width: 150px;
+    text-align: center;
+}
+
+/*bottom arrow*/
+[data-ghl-comment]:before {
+    content: "";
+    margin-bottom: 5px;
+    border-top: solid 8px #ddd;
+    border-left: solid 8px transparent;
+    border-right: solid 8px transparent;
+}
+
+/***
+<<< span popup prompting
+ */
+
 
 /**
 >>> marker-popup

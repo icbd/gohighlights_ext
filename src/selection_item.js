@@ -52,9 +52,13 @@ class SelectionItem {
         const nodes = this.selectedNodes();
         for (let i = 0; i < nodes.length; i++) {
             let hlSpan = document.createElement("span");
+            hlSpan.className="ghl-text";
             hlSpan.textContent = nodes[i].textContent;
             hlSpan.dataset.ghlColor = this.color;
             hlSpan.dataset.ghlHashKey = this.hashKey;
+            if (this.comment) {
+                hlSpan.dataset.ghlComment = this.comment;
+            }
             highlightNodes.push(hlSpan);
             nodes[i].parentNode.insertBefore(hlSpan, nodes[i]);
             nodes[i].parentNode.removeChild(nodes[i]);
