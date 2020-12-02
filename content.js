@@ -149,10 +149,15 @@ function initHighLights() {
 
 setTimeout(initHighLights, 500);
 
-function saveComment() {
+function saveComment(clickEvent) {
     const hashKey = $popup.dataset.ghlHashKey;
     const content = this.parentElement.querySelector("textarea").value;
     console.debug("saveComment", hashKey, content);
     SelectionCollection.PutComment(hashKey, content);
+    // update data-ghl-comment
+    const selector = "[data-ghl-hash-key='" + hashKey + "']";
+    document.querySelectorAll(selector).forEach(node => {
+        node.dataset.ghlComment = content;
+    });
     turnOffPopup();
 }
