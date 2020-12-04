@@ -52,7 +52,7 @@ class SelectionItem {
         const nodes = this.selectedNodes();
         for (let i = 0; i < nodes.length; i++) {
             let hlSpan = document.createElement("span");
-            hlSpan.className="ghl-text";
+            hlSpan.className = "ghl-text";
             hlSpan.textContent = nodes[i].textContent;
             hlSpan.dataset.ghlColor = this.color;
             hlSpan.dataset.ghlHashKey = this.hashKey;
@@ -81,29 +81,33 @@ class SelectionItem {
 
     // rebuild range
     static Parse(item) {
-        const selection = item.selection;
         try {
+            const selection = item.selection;
             const range = document.createRange();
+            const firstNodeContent = selection.texts[0];
+            const endNodeContent = selection.texts[selection.texts.length - 1];
+            const allTextNodes = filterTextNodes(dfsNodes(document.body));
 
-            let matchIndex = 0;
-            const nodes = filterTextNodes(dfsNodes(document.body));
-            nodes.forEach(function (node) {
-                if (selection.texts[matchIndex] !== node.textContent) {
-                    return
+            let found = false;
+            let nodeIndex = 0;
+            const startNodeSeeds = []; //[ {node: node, index: nodeIndex} ]
+            allTextNodes.forEach(function (node) {
+                nodeIndex += 1;
+                if (node.textContent === firstNodeContent) {
+                    startNodeSeeds.push({"node": node, "index": nodeIndex});
                 }
-
-                if (matchIndex === 0) {
-                    range.setStart(node, selection.startOffset);
+                if (node.textContent === endNodeContent) {
+                    for (let i = startNodeSeeds.length - 1; i >= 0; i--) {
+                        if (nodeIndex - startNodeSeeds[i].index === (selection.texts.length - 1)) { // Same distance
+                            found = true;
+                            range.setStart(startNodeSeeds[i].node, selection.startOffset);
+                            range.setEnd(node, selection.endOffset);
+                            return false;// jump forEach
+                        }
+                    }
                 }
-
-                if (matchIndex === (selection.texts.length - 1)) {
-                    range.setEnd(node, selection.endOffset);
-                    return false;// break forEach
-                }
-                matchIndex += 1
-            })
-
-            if (range.startContainer && range.endContainer) {
+            });
+            if (found) {
                 let content = undefined;
                 if (item.comment) {
                     content = item.comment.content;
