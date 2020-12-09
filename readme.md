@@ -14,6 +14,7 @@ functions:
 * Change Color
 * Remove Highlight
 * Replay Highlight
+* Update Comment
 
 ![Demo](demo.png)
 
