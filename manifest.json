@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Go Highlights",
-  "version": "0.0.3",
+  "version": "0.2.0",
   "description": "__MSG_full_description__",
   "short_name": "GoHighlights",
   "default_locale": "en",
