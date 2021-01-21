@@ -1,10 +1,17 @@
+let $OFF_ON = true;
 let $popup;
 let $comment;
 fetch(chrome.extension.getURL("./marker.html"))
     .then(response => response.text())
     .then(function (markerStr) {
+        if (document.contentType !== "text/html") { // such as SVG
+            $OFF_ON = false;
+            return
+        }
+
         const markerNode = new DOMParser().parseFromString(markerStr, "text/html");
-        document.body.appendChild(markerNode.body.firstChild);
+        const popupDom = markerNode.body.firstChild;
+        document.body.appendChild(popupDom);
 
         $popup = document.getElementById("ghl_marker_popup");
         $comment = $popup.querySelector(".ghl-comment");
@@ -92,8 +99,11 @@ window.addEventListener("click", function (clickEvent) {
 
 function turnOnPopup(event) {
     $popup.style.position = "absolute";
-    $popup.style.top = "" + event.pageY + "px";
-    $popup.style.left = "" + event.pageX + "px";
+
+    // set popup location
+    $popup.style.top = "" + (event.pageY - 60) + "px";
+    $popup.style.left = "" + (event.pageX - 50) + "px";
+
     $popup.style.display = "inline-block";
 }
 
@@ -123,6 +133,9 @@ function turnOffComment() {
 }
 
 function initHighLights() {
+    if (!$OFF_ON) {
+        return
+    }
     User.Current().then(user => {
         const msg = {
             msgType: "API_MSG",
