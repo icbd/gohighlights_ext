@@ -2,7 +2,7 @@ class Api {
     constructor(token, host) {
         this.token = token || ""
         // this.host = host || "http://localhost:3000"
-        this.host = host || "http://81.68.154.80:3000"
+        this.host = host || "https://gohighlights.c-bd.cn"
     }
 
     /*
