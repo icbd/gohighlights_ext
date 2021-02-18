@@ -25,6 +25,7 @@
         "style.css"
       ],
       "js": [
+        "src/vue.min.js",
         "src/utils.js",
         "src/user.js",
         "src/uuid.js",
