@@ -18,6 +18,10 @@
     background-color: #FEFA8B !important;
 }
 
+span.ghl-text {
+    cursor: pointer;
+}
+
 /***
 <<< color
  */
@@ -77,9 +81,8 @@
 >>> marker-popup
  */
 #ghl_marker_popup {
-    /*position: absolute;*/
-    display: none;
-    /*display: inline-block;*/
+    position: absolute;
+    display: inline-block;
     border: 1px solid #ddd;
     border-radius: 6px;
     box-shadow: #ddd 0 0 4px 2px;
@@ -114,19 +117,22 @@
 }
 
 #ghl_marker_popup .ghl-comment {
-    display: none;
     font-size: 13px;
     line-height: 13px;
 }
 
 #ghl_marker_popup .ghl-comment textarea {
     margin: 3px 0;
+    padding: 5px 5px 10px 5px;
     display: block;
+    width: 96px;
 }
 
 #ghl_marker_popup .ghl-comment button {
     cursor: pointer;
     border: none;
+    float: right;
+    border-radius: 8px;
 }
 
 /**
